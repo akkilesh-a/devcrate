@@ -1,0 +1,46 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+}
+
+model Resource {
+    id        String   @id @default(cuid())
+    title     String
+    url       String
+    favicon   String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Many-to-many relationship with tags
+    resourceTags ResourceTag[]
+
+    @@map("resources")
+}
+
+model Tag {
+    id    String @id @default(cuid())
+    name  String @unique
+    color String @default("#3b82f6") // Default blue color
+
+    // Many-to-many relationship with resources
+    resourceTags ResourceTag[]
+
+    @@map("tags")
+}
+
+model ResourceTag {
+    id         String @id @default(cuid())
+    resourceId String
+    tagId      String
+
+    resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+    tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+    @@unique([resourceId, tagId])
+    @@map("resource_tags")
+}

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Footer, Navbar, TargetCursor } from "@/components/layout";
+import { ThemeProvider } from "@/components/theme";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,9 +15,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DevCrate",
+  title: "DevCrate - Your Curated Developer Toolbox",
   description:
-    "DevCrate - Curated directory of developer tools, UI libraries, and resources built with Next.js, Tailwind CSS, and Supabase.",
+    "Discover and explore the best developer tools, UI libraries, and resources. DevCrate helps developers find the perfect tools to supercharge their workflow.",
+  keywords:
+    "developer tools, programming, software development, coding resources, UI libraries",
+  authors: [{ name: "spacecentre" }],
+  openGraph: {
+    title: "DevCrate - Your Curated Developer Toolbox",
+    description: "Discover and explore the best developer tools and resources",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -24,11 +34,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navbar />
+          <TargetCursor spinDuration={5} hideDefaultCursor />
+          <main className="pt-16">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
