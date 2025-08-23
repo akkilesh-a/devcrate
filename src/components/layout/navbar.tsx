@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui";
 import { ModeToggle } from "@/components/theme";
+import { GitHubStarsButton } from "../animated";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,7 @@ export function Navbar() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/10 backdrop-blur-xl border-b border-border/20 shadow-lg shadow-black/5"
+      className="fixed top-0 left-0 right-0 z-50 bg-background/10 backdrop-blur-sm border-b border-border/20 shadow-lg shadow-black/5"
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
@@ -57,6 +58,7 @@ export function Navbar() {
                 <span>{item.label}</span>
               </Link>
             ))}
+            <GitHubStarsButton username="akkilesh-a" repo="devcrate" />
             <ModeToggle
               variant="gif"
               url="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3JwcXdzcHd5MW92NWprZXVpcTBtNXM5cG9obWh0N3I4NzFpaDE3byZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/WgsVx6C4N8tjy/giphy.gif"
@@ -68,6 +70,11 @@ export function Navbar() {
             <ModeToggle
               variant="gif"
               url="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3JwcXdzcHd5MW92NWprZXVpcTBtNXM5cG9obWh0N3I4NzFpaDE3byZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/WgsVx6C4N8tjy/giphy.gif"
+            />
+            <GitHubStarsButton
+              mobileView
+              username="akkilesh-a"
+              repo="devcrate"
             />
             <Button
               variant="ghost"
@@ -92,7 +99,7 @@ export function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="md:hidden border-t border-border/20 bg-background/10 backdrop-blur-xl"
+              className="md:hidden border-t border-border/20 "
             >
               <div className="py-4 space-y-2">
                 {menuItems.map((item) => (

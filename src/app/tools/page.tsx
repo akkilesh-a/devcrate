@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import Fuse from "fuse.js";
-import { Button, Input } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { H1, H3, P } from "@/components/typography";
 import {
   Filters,
@@ -17,6 +17,7 @@ import {
   BricksLayoutSkeleton,
   FiltersSkeleton,
   ResultsSummarySkeleton,
+  SearchBar,
 } from "@/components/tools-page";
 import { supabase } from "@/lib/supabase";
 import type { Resource, LayoutType, Tag } from "@/types/tools";
@@ -240,20 +241,6 @@ export default function ToolsPage() {
     return (
       <div className="flex flex-col min-h-screen relative">
         <div className="container mx-auto px-4 py-8">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
-            <div className="text-center mb-8">
-              <H1 className="mb-4">Developer Tools Catalog</H1>
-              <P size="large" className="max-w-2xl mx-auto">
-                Loading tools...
-              </P>
-            </div>
-          </motion.div>
-
           {/* Search and Filters */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -262,16 +249,11 @@ export default function ToolsPage() {
             className="mb-8 space-y-6"
           >
             {/* Search Bar */}
-            <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-              <Input
-                placeholder="Search tools or tags..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12"
-                disabled
-              />
-            </div>
+            <SearchBar
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              disabled
+            />
 
             {/* Filters and Layout Controls */}
             <div className="flex items-center justify-between">
@@ -308,15 +290,7 @@ export default function ToolsPage() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
         >
-          <div className="text-center mb-8">
-            <H1 className="mb-4">Developer Tools Catalog</H1>
-            <P size="large" className="max-w-2xl mx-auto">
-              Discover {resources.length} carefully curated developer tools
-            </P>
-          </div>
-
           {/* Error handling and refresh */}
           {error && (
             <motion.div
@@ -342,15 +316,10 @@ export default function ToolsPage() {
           className="mb-8 space-y-6"
         >
           {/* Search Bar */}
-          <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
-            <Input
-              placeholder="Search tools or tags..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12"
-            />
-          </div>
+          <SearchBar
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
 
           {/* Filters and Layout Controls */}
           <div className="flex items-center justify-between">

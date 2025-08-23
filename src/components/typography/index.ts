@@ -4,3 +4,4 @@ export * from "./h3";
 export * from "./h4";
 export * from "./p";
 export * from "./curved-loop";
+export * from "./sliding-number";

@@ -3,7 +3,7 @@ import { LinkPreview } from "../animated";
 
 export const Footer = () => {
   return (
-    <footer className="w-full mt-6">
+    <footer className="w-full mt-16">
       <div className="container mx-auto pb-6 flex flex-col items-center">
         <P variant="muted" className="text-center">
           Built by{" "}
