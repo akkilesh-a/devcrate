@@ -26,6 +26,9 @@ export const metadata: Metadata = {
     description: "Discover and explore the best developer tools and resources",
     type: "website",
   },
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
