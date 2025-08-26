@@ -6,3 +6,5 @@ export * from "./layout-switcher";
 export * from "./resource-icon";
 export * from "./search-bar";
 export * from "./skeleton-layouts";
+export * from "./tools-page-loading";
+export * from "./tools-page-client";
