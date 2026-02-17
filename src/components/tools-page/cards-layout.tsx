@@ -19,7 +19,7 @@ export function CardsLayout({ resources, cardVariants }: CardsLayoutProps) {
         <motion.div
           key={resource.id}
           variants={cardVariants}
-          className="cursor-target"
+          className="cursor-pointer"
         >
           <motion.div
             whileHover={{
@@ -31,60 +31,62 @@ export function CardsLayout({ resources, cardVariants }: CardsLayoutProps) {
               },
             }}
             layout
+            className="h-full"
           >
-            <Card className="group p-3">
-              <CardContent className="p-0">
-                <div className="flex items-start gap-3">
-                  <ResourceIcon
-                    favicon={resource.favicon}
-                    title={resource.title}
-                    size="large"
-                  />
-                  <div className="flex-1 flex flex-col justify-between min-w-0 gap-2">
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <P
-                        size="small"
-                        className="font-semibold leading-tight group-hover:text-primary"
-                      >
-                        {resource.title}
-                      </P>
-                      <a
-                        href={resource.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+            <a
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block h-full cursor-target"
+            >
+              <Card className="group p-3 h-full">
+                <CardContent className="p-0">
+                  <div className="flex items-start gap-3">
+                    <ResourceIcon
+                      favicon={resource.favicon}
+                      title={resource.title}
+                      size="large"
+                    />
+                    <div className="flex-1 flex flex-col justify-between min-w-0 gap-2">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <P
+                          size="small"
+                          className="font-semibold leading-tight group-hover:text-primary"
+                        >
+                          {resource.title}
+                        </P>
                         <Globe className="h-4 w-4 text-muted-foreground" />
-                      </a>
-                    </div>
+                      </div>
 
-                    <div className="flex flex-wrap gap-1">
-                      {resource.tags.slice(0, 3).map((tag) => (
-                        <Badge
-                          key={tag.id}
-                          variant="secondary"
-                          className="text-xs px-1.5 py-0.5 h-auto"
-                          style={{
-                            backgroundColor: tag.color + "20",
-                            borderColor: tag.color + "40",
-                            color: tag.color,
-                          }}
-                        >
-                          {tag.name}
-                        </Badge>
-                      ))}
-                      {resource.tags.length > 3 && (
-                        <Badge
-                          variant="secondary"
-                          className="text-xs px-1.5 py-0.5 h-auto bg-muted text-muted-foreground"
-                        >
-                          +{resource.tags.length - 3}
-                        </Badge>
-                      )}
+                      <div className="flex flex-wrap gap-1">
+                        {resource.tags.slice(0, 3).map((tag) => (
+                          <Badge
+                            key={tag.id}
+                            variant="secondary"
+                            className="text-xs px-1.5 py-0.5 h-auto"
+                            style={{
+                              backgroundColor: tag.color + "20",
+                              borderColor: tag.color + "40",
+                              color: tag.color,
+                            }}
+                          >
+                            {tag.name}
+                          </Badge>
+                        ))}
+                        {resource.tags.length > 3 && (
+                          <Badge
+                            variant="secondary"
+                            className="text-xs px-1.5 py-0.5 h-auto bg-muted text-muted-foreground"
+                          >
+                            +{resource.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </a>
           </motion.div>
         </motion.div>
       ))}

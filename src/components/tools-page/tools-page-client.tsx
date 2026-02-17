@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search } from "lucide-react";
 import Fuse from "fuse.js";
@@ -51,8 +52,17 @@ export function ToolsPageClient({
   initialTags,
   initialLayout = "cards",
 }: ToolsPageClientProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Initialize state from URL params
+  const [searchQuery, setSearchQuery] = useState(
+    searchParams.get("q")?.toString() || "",
+  );
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    searchParams.get("tags")?.split(",").filter(Boolean) || [],
+  );
   const [layout, setLayout] = useState<LayoutType>(initialLayout);
 
   // Load saved layout from localStorage on client
@@ -64,6 +74,78 @@ export function ToolsPageClient({
       }
     }
   }, []);
+
+  // Sync State FROM URL (Handle Back/Forward)
+  useEffect(() => {
+    const urlQ = searchParams.get("q")?.toString() || "";
+    const urlTags = searchParams.get("tags")?.split(",").filter(Boolean) || [];
+
+    if (urlQ !== searchQuery) {
+      setSearchQuery(urlQ);
+    }
+
+    // content check for tags
+    const sortedUrlTags = [...urlTags].sort().join(",");
+    const sortedStateTags = [...selectedTags].sort().join(",");
+    if (sortedUrlTags !== sortedStateTags) {
+      setSelectedTags(urlTags);
+    }
+  }, [searchParams]);
+
+  // Helper to update URL
+  const updateUrl = useCallback(
+    (
+      newQuery: string,
+      newTags: string[],
+      method: "push" | "replace" = "replace",
+    ) => {
+      const params = new URLSearchParams();
+      if (newQuery) params.set("q", newQuery);
+      if (newTags.length > 0) params.set("tags", newTags.join(","));
+
+      const newUrl = `${pathname}?${params.toString()}`;
+      router[method](newUrl, { scroll: false });
+    },
+    [pathname, router],
+  );
+
+  // Effect to handle search query URL updates (debounce)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const urlQ = searchParams.get("q")?.toString() || "";
+      if (searchQuery !== urlQ) {
+        updateUrl(searchQuery, selectedTags, "replace");
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, updateUrl, searchParams, selectedTags]);
+
+  // Wait, if I put selectedTags in `updateUrl` deps, it changes often.
+  // Better: The effect solely handles search query changes.
+  // But `updateUrl` needs current tags.
+  // We can trust `selectedTags` state in the effect.
+
+  // Handlers
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    // URL update handled by debounce effect
+  };
+
+  const toggleTag = (tagName: string) => {
+    const newTags = selectedTags.includes(tagName)
+      ? selectedTags.filter((t) => t !== tagName)
+      : [...selectedTags, tagName];
+
+    setSelectedTags(newTags);
+    updateUrl(searchQuery, newTags, "push");
+  };
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedTags([]);
+    updateUrl("", [], "push");
+  };
 
   // Setup Fuse.js for fuzzy search
   const fuse = useMemo(() => {
@@ -84,7 +166,7 @@ export function ToolsPageClient({
     // Apply tag filters
     if (selectedTags.length > 0) {
       filtered = filtered.filter((resource) =>
-        resource.tags.some((tag) => selectedTags.includes(tag.name))
+        resource.tags.some((tag) => selectedTags.includes(tag.name)),
       );
     }
 
@@ -97,18 +179,7 @@ export function ToolsPageClient({
     return filtered;
   }, [initialResources, selectedTags, searchQuery, fuse]);
 
-  const toggleTag = (tagName: string) => {
-    setSelectedTags((prev) =>
-      prev.includes(tagName)
-        ? prev.filter((tag) => tag !== tagName)
-        : [...prev, tagName]
-    );
-  };
-
-  const clearFilters = () => {
-    setSearchQuery("");
-    setSelectedTags([]);
-  };
+  /* Handlers replaced above */
 
   const handleLayoutChange = (newLayout: LayoutType) => {
     setLayout(newLayout);
@@ -163,7 +234,7 @@ export function ToolsPageClient({
           {/* Search Bar */}
           <SearchBar
             searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
+            onSearchChange={handleSearchChange}
           />
 
           {/* Filters and Layout Controls */}

@@ -7,7 +7,10 @@ export const Footer = () => {
       <div className="container mx-auto pb-6 flex flex-col items-center">
         <P variant="muted" className="text-center">
           Built by{" "}
-          <LinkPreview url="https://bento.me/akkilesh" className="underline">
+          <LinkPreview
+            url="https://github.com/akkilesh-a"
+            className="underline"
+          >
             spacecentre
           </LinkPreview>
           . The source code is available on{" "}

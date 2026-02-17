@@ -10,10 +10,11 @@
     "seed": "tsx prisma/seed.ts",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "postinstall": "npm run db:generate"
   },
   "dependencies": {
-    "@prisma/client": "^6.19.2",
+    "@prisma/client": "6.19.2",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-hover-card": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",

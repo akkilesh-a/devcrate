@@ -37,7 +37,7 @@ export function ResourceIcon({
 
   return (
     <div
-      className={`border rounded-lg flex items-center justify-center flex-shrink-0 ${classes.container} ${className}`}
+      className={`border rounded-lg flex items-center justify-center shrink-0 ${classes.container} ${className}`}
     >
       {favicon ? (
         <img
